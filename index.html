@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>لعبة قدرة الله تعالى - سورة النحل</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
             margin: 0;
@@ -90,6 +91,7 @@
         .menu-card .icon {
             font-size: 3.5em;
             margin-bottom: 15px;
+            color: #0f9b8e;
         }
 
         .menu-card h2 {
@@ -567,37 +569,37 @@
 
         <div id="menu" class="menu-container">
             <div class="menu-card" onclick="startGame(1)">
-                <div class="icon">📚</div>
+                <div class="icon"><i class="fas fa-book-open"></i></div>
                 <h2>أسئلة الفهم والتدبر</h2>
                 <p>اختبر فهمك لمعاني الآيات الكريمة</p>
             </div>
 
             <div class="menu-card" onclick="startGame(2)">
-                <div class="icon">🔗</div>
+                <div class="icon"><i class="fas fa-link"></i></div>
                 <h2>التوصيل والمطابقة</h2>
                 <p>صل المفردات القرآنية بمعانيها</p>
             </div>
 
             <div class="menu-card" onclick="startGame(3)">
-                <div class="icon">🎯</div>
+                <div class="icon"><i class="fas fa-bullseye"></i></div>
                 <h2>مظاهر قدرة الله</h2>
                 <p>صنف مظاهر القدرة الإلهية في الآيات</p>
             </div>
 
             <div class="menu-card" onclick="startGame(4)">
-                <div class="icon">✍️</div>
+                <div class="icon"><i class="fas fa-pen"></i></div>
                 <h2>أكمل الآيات</h2>
                 <p>أكمل الفراغات في الآيات الكريمة</p>
             </div>
 
             <div class="menu-card" onclick="startGame(5)">
-                <div class="icon">🔢</div>
+                <div class="icon"><i class="fas fa-sort-numeric-down"></i></div>
                 <h2>ترتيب الآيات</h2>
                 <p>رتب الآيات حسب تسلسلها الصحيح</p>
             </div>
 
             <div class="menu-card" onclick="startGame(6)">
-                <div class="icon">💡</div>
+                <div class="icon"><i class="fas fa-lightbulb"></i></div>
                 <h2>الدروس المستفادة</h2>
                 <p>تعرف على الدروس والعبر من الآيات</p>
             </div>
@@ -635,7 +637,7 @@
                         explanation: 'قال تعالى: "فَأَحْيَا بِهِ الْأَرْضَ بَعْدَ مَوْتِهَا"، أي تعود للحياة بعد الجفاف'
                     },
                     {
-                        question: 'في الآية إشارة إلى أي نوع من الناس؟',
+                        question: 'في الآية ( 65)إشارة إلى أي نوع من الناس؟',
                         options: ['الذين يسمعون', 'الذين يبصرون', 'الذين يعقلون', 'الذين يقرؤون'],
                         correct: 0,
                         explanation: 'قال تعالى: "إِنَّ فِي ذَلِكَ لَآيَةً لِقَوْمٍ يَسْمَعُونَ"'
@@ -888,7 +890,7 @@
                         </div>
                         <div class="options" id="options">
                             ${q.options.map((opt, i) => `
-                                <div class="option" onclick="checkAnswer(${i}, ${q.correct}, '${q.explanation}', ${gameNumber})">${opt}</div>
+                                <div class="option" onclick="checkAnswer(${i}, ${q.correct}, ${gameNumber})">${opt}</div>
                             `).join('')}
                         </div>
                         <div id="feedback"></div>
@@ -900,7 +902,9 @@
             displayQuestion();
         }
 
-        function checkAnswer(selected, correct, explanation, gameNumber) {
+        function checkAnswer(selected, correct, gameNumber) {
+            const game = games[gameNumber];
+            const q = game.questions[currentQuestion];
             const options = document.querySelectorAll('.option');
             const feedback = document.getElementById('feedback');
             const nextBtn = document.getElementById('nextBtn');
@@ -916,9 +920,9 @@
 
             if (selected === correct) {
                 currentScore++;
-                feedback.innerHTML = `<div class="feedback correct">✓ إجابة صحيحة! ${explanation}</div>`;
+                feedback.innerHTML = `<div class="feedback correct">✓ إجابة صحيحة! ${q.explanation}</div>`;
             } else {
-                feedback.innerHTML = `<div class="feedback wrong">✗ إجابة خاطئة. ${explanation}</div>`;
+                feedback.innerHTML = `<div class="feedback wrong">✗ إجابة خاطئة. ${q.explanation}</div>`;
             }
 
             nextBtn.classList.add('show');
@@ -1030,7 +1034,6 @@
             const game = games[3];
             const categories = ['الظواهر الطبيعية', 'عجائب الخلق', 'النعم والرزق', 'إلهام المخلوقات'];
             let powers = [...game.powers].sort(() => Math.random() - 0.5);
-            let categorized = { 'الظواهر الطبيعية': [], 'عجائب الخلق': [], 'النعم والرزق': [], 'إلهام المخلوقات': [] };
             
             const gameContainer = document.getElementById('gameContainer');
             gameContainer.innerHTML = `
@@ -1251,7 +1254,8 @@
             let score = 0;
 
             dropZones.forEach((zone, i) => {
-                if (zone.dataset.verse === correctOrder[i]) {
+                const droppedItem = zone.querySelector('.drag-item');
+                if (droppedItem && droppedItem.dataset.verse === correctOrder[i]) {
                     score++;
                     zone.style.borderColor = '#4caf50';
                     zone.style.background = '#c8e6c9';
